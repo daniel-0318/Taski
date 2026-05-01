@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
-    path: 'tasks',
-    loadComponent: () => import('./pages/tasks/tasks.component').then( c => c.TasksComponent)
+  { 
+    path: 'tasks', 
+    loadChildren: () => import('./pages/tasks/tasks.module').then(m => m.TasksModule) 
   },
-  {
-    path: 'categories',
-    loadComponent: () => import('./pages/categories/categories.component').then( c => c.CategoriesComponent)
+  { 
+    path: 'categories', 
+    loadChildren: () => import('./pages/categories/categories.module').then(m => m.CategoriesModule) 
   },
   {
     path: '',
