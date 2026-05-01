@@ -7,5 +7,11 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
+
+  public appPages = [
+    { title: 'Tareas', url: '/tasks', icon: 'checkmark-circle' },
+    { title: 'Categorias', url: '/categories', icon: 'bookmarks' },
+  ];
+  
   constructor() {}
 }

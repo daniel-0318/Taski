@@ -1,3 +1,31 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    @for (page of appPages; track page; let i = $index) {
+      <ion-menu-toggle auto-hide="false">
+        <ion-item [routerLink]="page.url" routerDirection="root" lines="none" detail={false}>
+          <ion-icon ria-hidden="true" slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'"></ion-icon>
+          <ion-label>{{page.title}}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    }
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-content>
+</div>
 </ion-app>
