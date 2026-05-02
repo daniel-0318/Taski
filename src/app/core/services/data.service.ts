@@ -4,6 +4,7 @@ import { Task } from '../models/task.model';
 import { Category } from '../models/category.model';
 import { StorageService } from './storage.service';
 import { STORAGE_KEYS } from '../constants/storage.constants';
+import { uid } from 'uid';
 
 @Injectable({
   providedIn: 'root',
@@ -18,20 +19,7 @@ export class DataService {
   }
 
   private async init() {
-    const savedTasks = await this.storage.get<Task[]>(STORAGE_KEYS.TASKS) || [
-      {
-        id: '1',
-        title: 'test',
-        dueDate: new Date(),
-        completed: false,
-        categoryId: 'tech'
-      },
-      {
-        id: '2',
-        title: 'Comprar café',
-        completed: true
-      }
-    ];
+    const savedTasks = await this.storage.get<Task[]>(STORAGE_KEYS.TASKS) || [];
     const savedCategories = await this.storage.get<Category[]>(STORAGE_KEYS.CATEGORIES) || [];
 
     this.tasksSubject.next(savedTasks);
@@ -43,6 +31,7 @@ export class DataService {
   }
 
   async addTask(task: Task) {
+    task.id = uid();
     const updatedTasks = [...this.tasksSubject.value, task];
     this.updateTasksState(updatedTasks);
   }
