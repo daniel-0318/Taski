@@ -6,15 +6,26 @@
 
 <ion-content class="ion-padding">
   <ion-list>
-  <ion-item>
-    <ion-input labelPlacement="floating" label="título" [(ngModel)]="title" placeholder="Ingrese un título para la tarea"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-textarea labelPlacement="floating" label="descripción" [(ngModel)]="description" placeholder="Ingrese la descripción de la tarea"></ion-textarea>
-  </ion-item>
-  <ion-item>
-    <ion-datetime presentation="date-time" labelPlacement="floating" label="Fecha de vencimiento" displayFormat="DD/MM/YYYY" [(ngModel)]="dueDate"></ion-datetime>
-  </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="floating" label="título" [(ngModel)]="title"
+        placeholder="Ingrese un título para la tarea"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea labelPlacement="floating" label="descripción" [(ngModel)]="description"
+        placeholder="Ingrese la descripción de la tarea"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Categoría</ion-label>
+      <ion-select placeholder="Seleccione una categoría" [(ngModel)]="categoryId">
+        <ion-select-option *ngFor="let category of categories$ | async" [value]="category.id">
+          {{ category.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-datetime presentation="date-time" labelPlacement="floating" label="Fecha de vencimiento"
+        displayFormat="DD/MM/YYYY" [(ngModel)]="dueDate"></ion-datetime>
+    </ion-item>
   </ion-list>
   <ion-button expand="block" (click)="cancel()" color="danger">Cancelar</ion-button>
   <ion-button expand="block" (click)="createTask()" [disabled]="!validateForm()">Crear tarea</ion-button>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { Task } from '../models/task.model';
 import { Category } from '../models/category.model';
 import { StorageService } from './storage.service';
@@ -27,13 +27,32 @@ export class DataService {
   }
 
   getTasks$(): Observable<Task[]> {
-    return this.tasksSubject.asObservable();
+    return combineLatest([this.tasksSubject, this.categoriesSubject]).pipe(
+      map(([tasks, categories]) => {
+        return tasks.map(task => ({
+          ...task,
+          categoryName: categories.find(c => c.id === task.categoryId)?.name || 'Sin categoría',
+          priorityName: categories.find(c => c.id === task.categoryId)?.priority || 'Sin prioridad'
+        }))
+      })
+    );
+
+  }
+
+  getCategories$(): Observable<Category[]> {
+    return this.categoriesSubject.asObservable();
   }
 
   async addTask(task: Task) {
     task.id = uid();
     const updatedTasks = [...this.tasksSubject.value, task];
     this.updateTasksState(updatedTasks);
+  }
+
+  async addCategory(category: Category) {
+    category.id = uid();
+    const updatedCategories = [...this.categoriesSubject.value, category];
+    this.updateCategoriesState(updatedCategories);
   }
 
   async toggleTask(taskId: string) {
@@ -48,10 +67,20 @@ export class DataService {
     this.updateTasksState(updatedTasks);
   }
 
+  async deleteCategory(categoryId: string) {
+    const updatedCategories = this.categoriesSubject.value.filter(category => category.id !== categoryId);
+    this.updateCategoriesState(updatedCategories);
+  }
+
 
   private async updateTasksState(tasks: Task[]) {
     this.tasksSubject.next(tasks);
     await this.storage.set(STORAGE_KEYS.TASKS, tasks);
+  }
+
+  private async updateCategoriesState(categories: Category[]) {
+    this.categoriesSubject.next(categories);
+    await this.storage.set(STORAGE_KEYS.CATEGORIES, categories);
   }
 
 }

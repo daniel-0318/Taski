@@ -1,13 +1,17 @@
 <ion-list>
+  @if ((tasks$ | async)?.length === 0) {
+  <ion-item>
+    <ion-label class="text-center">No hay tareas</ion-label>
+  </ion-item>
+  }
   @for (task of tasks$ | async; track $index) {
   <ion-card>
     <ion-card-header>
-      <ion-card-title>{{ task.title }}</ion-card-title>
-      <ion-card-subtitle>{{ task.dueDate | date }}</ion-card-subtitle>
+      <ion-card-title [class]="{ 'text-through': task.completed }">{{ task.title }}</ion-card-title>
       @if (task.categoryId) {
       <ion-item>
-        <ion-icon aria-hidden="true" name="ellipse" size="small"></ion-icon>
-        <ion-label>{{task.categoryId}}</ion-label>
+        <ion-icon aria-hidden="true" name="ellipse" size="small" [color]="priorityColors[task.priorityName!]"></ion-icon>
+        <ion-label>{{ task.categoryName }}</ion-label>
       </ion-item>
       }
     </ion-card-header>
@@ -20,7 +24,7 @@
       }
       @if (task.dueDate) {
       <p>
-        vence el: {{ task.dueDate | date }}
+        vence el: {{ task.dueDate | date:'dd/MM/yyyy HH:mm' }}
       </p>
       }
     </ion-card-content>
@@ -30,7 +34,7 @@
     </ion-button>
     <ion-button size="default" fill="clear" (click)="toggleTask(task.id)">
       <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-      Completada
+      {{ task.completed ? 'Desmarcar':'Completada' }}
     </ion-button>
   </ion-card>
   }

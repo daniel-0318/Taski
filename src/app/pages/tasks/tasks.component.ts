@@ -4,6 +4,8 @@ import { Task } from '../../core/models/task.model';
 import { DataService } from 'src/app/core/services/data.service';
 import { AlertController, ModalController } from '@ionic/angular';
 import { CreateTasksComponent } from './create-tasks/create-tasks.component';
+import { Category } from 'src/app/core/models/category.model';
+import { PRIORITY_COLORS } from 'src/app/core/constants/categories.constants';
 
 @Component({
   selector: 'app-tasks',
@@ -14,6 +16,8 @@ import { CreateTasksComponent } from './create-tasks/create-tasks.component';
 export class TasksComponent implements OnInit {
 
   tasks$: Observable<Task[]>;
+  categories$: Observable<Category[]>;
+  priorityColors = PRIORITY_COLORS
 
   alertButtons = [
     {
@@ -33,6 +37,7 @@ export class TasksComponent implements OnInit {
     private modalCtrl: ModalController, 
     private alertController: AlertController) {
     this.tasks$ = this.dataService.getTasks$();
+    this.categories$ = this.dataService.getCategories$();
   }
 
   ngOnInit() { }
