@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { Task } from '../../core/models/task.model';
 import { DataService } from 'src/app/core/services/data.service';
 import { AlertController, ModalController } from '@ionic/angular';
@@ -15,9 +15,14 @@ import { PRIORITY_COLORS } from 'src/app/core/constants/categories.constants';
 })
 export class TasksComponent implements OnInit {
 
-  tasks$: Observable<Task[]>;
+  filteredTasks$: Observable<Task[]>;
   categories$: Observable<Category[]>;
-  priorityColors = PRIORITY_COLORS
+  filteredTasks: Task[] = [];
+  displayedTasks: Task[] = [];
+
+  priorityColors = PRIORITY_COLORS;
+  private searchTerm$ = new BehaviorSubject<string>('');
+  private limit$ = new BehaviorSubject<number>(10);
 
   alertButtons = [
     {
@@ -33,17 +38,30 @@ export class TasksComponent implements OnInit {
   ];
 
   constructor(
-    private dataService: DataService, 
-    private modalCtrl: ModalController, 
+    private dataService: DataService,
+    private modalCtrl: ModalController,
     private alertController: AlertController) {
-    this.tasks$ = this.dataService.getTasks$();
+
     this.categories$ = this.dataService.getCategories$();
+    this.filteredTasks$ = combineLatest([
+      this.dataService.getTasks$(),
+      this.searchTerm$,
+      this.limit$
+    ]).pipe(
+      map(([tasks, searchTerm, limit]) => {
+        const filtered = tasks.filter( t => 
+          t.title.toLowerCase().includes(searchTerm) || (t.description && t.description.toLowerCase().includes(searchTerm))
+        );
+        return filtered.slice(0, limit);
+      })
+    );
   }
 
   ngOnInit() { }
 
   onIonInfinite(event: any) {
     setTimeout(() => {
+      this.nextPage();
       event.target.complete();
     }, 500);
   }
@@ -56,7 +74,7 @@ export class TasksComponent implements OnInit {
 
   }
 
-  async showAlert(id:string) {
+  async showAlert(id: string) {
     const alert = await this.alertController.create({
       header: '¿Eliminar tarea?',
       message: '¿Estás seguro de que deseas eliminar esta tarea?',
@@ -76,6 +94,17 @@ export class TasksComponent implements OnInit {
 
   toggleTask(taskId: string) {
     this.dataService.toggleTask(taskId);
+  }
+
+  searchTasks(event: any) {
+    const searchTerm = event.target.value.toLowerCase() || '';
+    this.searchTerm$.next(searchTerm);
+    this.limit$.next(10);
+  }
+
+  nextPage() {
+    const currentLimit = this.limit$.value;
+    this.limit$.next(currentLimit + 10);
   }
 
 }

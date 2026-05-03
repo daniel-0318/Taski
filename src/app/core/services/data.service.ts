@@ -55,6 +55,11 @@ export class DataService {
     this.updateCategoriesState(updatedCategories);
   }
 
+  async updateCategory(updatedCategory: Category) {
+    const updatedCategories = this.categoriesSubject.value.map( category => category.id === updatedCategory.id ? updatedCategory : category);
+    this.updateCategoriesState(updatedCategories);
+  }
+
   async toggleTask(taskId: string) {
     const updatedTasks = this.tasksSubject.value.map(task =>
       task.id === taskId ? { ...task, completed: !task.completed } : task

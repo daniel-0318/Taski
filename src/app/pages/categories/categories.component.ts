@@ -54,6 +54,15 @@ export class CategoriesComponent implements OnInit {
 
   }
 
+  async editCategory(category: Category) {
+    const modal = await this.modalCtrl.create({
+      component: CreateCategoriesComponent,
+      componentProps: { category }
+    });
+    modal.present();
+    
+  }
+
   async showAlert(id: string) {
     const alert = await this.alertController.create({
       header: '¿Eliminar categoría?',

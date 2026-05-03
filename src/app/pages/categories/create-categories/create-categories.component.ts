@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Category } from 'src/app/core/models/category.model';
 import { DataService } from 'src/app/core/services/data.service';
@@ -9,14 +9,22 @@ import { DataService } from 'src/app/core/services/data.service';
   styleUrls: ['./create-categories.component.scss'],
   standalone: false
 })
-export class CreateCategoriesComponent  implements OnInit {
+export class CreateCategoriesComponent implements OnInit {
 
-  name: string = "";
-  priority: string = "";
+  @Input() category: Category = {
+    id: '',
+    name: '',
+    priority: ''
+  };
 
-  constructor(private modalCtrl: ModalController, private dataService: DataService) { }
 
-  ngOnInit() {}
+  constructor(private modalCtrl: ModalController, private dataService: DataService) {
+    console.log('category', this.category);
+  }
+
+  ngOnInit() {
+    console.log('ngOnInit category', this.category);
+  }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
@@ -27,21 +35,36 @@ export class CreateCategoriesComponent  implements OnInit {
   }
 
   createCategory() {
-      if (!this.validateForm()) {
-        return;
-      }
-  
-      const newCategory: Category = {
-        id: '',
-        name: this.name,
-        priority: this.priority
-      };
-      this.dataService.addCategory(newCategory);
-      this.confirm();
+    console.log('createCategory', this.category);
+    if (!this.validateForm()) {
+      return;
     }
-  
-    validateForm(): boolean {
-      return this.name.trim() !== '' && this.priority.trim() !== '';
+
+    const newCategory: Category = {
+      id: '',
+      name: this.category.name,
+      priority: this.category.priority
+    };
+    this.dataService.addCategory(newCategory);
+    this.confirm();
+  }
+
+  updateCategory() {
+    console.log('updateCategory', this.category);
+    if (!this.validateForm()) {
+      return;
     }
+    const updatedCategory: Category = {
+      id: this.category.id,
+      name: this.category.name,
+      priority: this.category.priority
+    };
+    this.dataService.updateCategory(updatedCategory);
+    this.confirm();
+  }
+
+  validateForm(): boolean {
+    return this.category.name.trim() !== '' && this.category.priority.trim() !== '';
+  }
 
 }
