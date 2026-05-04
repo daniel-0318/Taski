@@ -53,6 +53,7 @@ export class TasksComponent implements OnInit {
       map(([tasks, searchTerm, limit]) => {
         const filtered = tasks.filter( t => 
           t.title.toLowerCase().includes(searchTerm) || (t.description && t.description.toLowerCase().includes(searchTerm))
+          || (t.categoryName && t.categoryName.toLowerCase().includes(searchTerm))
         );
         return filtered.slice(0, limit);
       })

@@ -76,7 +76,6 @@ export class DataService {
   }
 
   async updateTask(updatedTask: Task) {
-    console.log('Updating task:', updatedTask);
     const updatedTasks = this.tasksSubject.value.map(task => task.id === updatedTask.id ? updatedTask : task);
     this.updateTasksState(updatedTasks);
   }
