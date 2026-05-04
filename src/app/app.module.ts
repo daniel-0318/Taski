@@ -6,17 +6,21 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { IonContent, IonHeader, IonMenu, IonSplitPane, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule, 
-    IonicModule.forRoot(), 
+    BrowserModule,
+    IonicModule.forRoot(),
     AppRoutingModule,
-
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+  provideRemoteConfig(() => getRemoteConfig()),
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
