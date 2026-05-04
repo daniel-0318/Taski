@@ -1,7 +1,4 @@
-<ion-searchbar 
-  placeholder="Buscar tarea" 
-  (ionInput)="searchTasks($event)" 
-  debounce="300">
+<ion-searchbar placeholder="Buscar tarea" (ionInput)="searchTasks($event)" debounce="300">
 </ion-searchbar>
 <ion-content>
   <ion-list>
@@ -16,12 +13,13 @@
         <ion-card-title [class]="{ 'text-through': task.completed }">{{ task.title }}</ion-card-title>
         @if (task.categoryId) {
         <ion-item>
-          <ion-icon aria-hidden="true" name="ellipse" size="small" [color]="priorityColors[task.priorityName!]"></ion-icon>
+          <ion-icon aria-hidden="true" name="ellipse" size="small"
+            [color]="priorityColors[task.priorityName!]"></ion-icon>
           <ion-label>{{ task.categoryName }}</ion-label>
         </ion-item>
         }
       </ion-card-header>
-  
+
       <ion-card-content>
         @if (task.description) {
         <p>
@@ -38,10 +36,12 @@
         <ion-icon slot="start" name="trash-outline"></ion-icon>
         Eliminar
       </ion-button>
+      @if (canEdit$ | async) {
       <ion-button size="small" fill="clear" (click)="editTask(task)">
         <ion-icon slot="start" name="create-outline"></ion-icon>
         Editar
       </ion-button>
+      }
       <ion-button size="small" fill="clear" (click)="toggleTask(task.id)">
         <ion-icon slot="start" name="checkmark-outline"></ion-icon>
         {{ task.completed ? 'Desmarcar':'Completada' }}

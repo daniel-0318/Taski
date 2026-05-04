@@ -6,6 +6,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { CreateTasksComponent } from './create-tasks/create-tasks.component';
 import { Category } from 'src/app/core/models/category.model';
 import { PRIORITY_COLORS } from 'src/app/core/constants/categories.constants';
+import { RemoteConfigService } from 'src/app/core/services/remote-config.service';
 
 @Component({
   selector: 'app-tasks',
@@ -17,6 +18,7 @@ export class TasksComponent implements OnInit {
 
   filteredTasks$: Observable<Task[]>;
   categories$: Observable<Category[]>;
+  public canEdit$: Observable<boolean>;
 
   priorityColors = PRIORITY_COLORS;
   private searchTerm$ = new BehaviorSubject<string>('');
@@ -38,8 +40,10 @@ export class TasksComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private modalCtrl: ModalController,
-    private alertController: AlertController) {
-
+    private alertController: AlertController,
+    private remoteConfigService: RemoteConfigService
+  ) {
+    this.canEdit$ = this.remoteConfigService.isEditTaskVisible$;
     this.categories$ = this.dataService.getCategories$();
     this.filteredTasks$ = combineLatest([
       this.dataService.getTasks$(),
