@@ -44,8 +44,11 @@ ionic cordova platform add android
 # Generar el archivo APK
 ionic cordova build android
 ```
+Una vez termine el proceso se visualizara la url donde se genero el archivo APK
 
 ### 4. Compilación para IOS
+
+Para su finalizacióon se debe realizar en un Mac y contar con una developer para finalizar el proceso
 ```bash
 # Agregar la plataforma IOS
 ionic cordova platform add ios
@@ -53,4 +56,14 @@ ionic cordova platform add ios
 # Generar el archivo IPA
 ionic cordova build ios
 ```
+1. Cuando finalice correctamente se debe terminar el proceso en Xcode
+2. Abre el archivo platforms/ios/App.xcworkspace en Xcode.
+3. En la barra superior, selecciona Any iOS Device (arm64) como destino (no selecciones un simulador).
+4. Ve al menú Product > Archive.
+5. Espera a que termine. Se abrirá la ventana "Organizer".
+6. Haz clic en el botón azul Distribute App.
+7. Seleccione la opción de Custom.
+8. Seleccione la opción de Ad Hoc.
+9. te pedira firma la app y luego de de te dara la opcion de "export"
+
 
