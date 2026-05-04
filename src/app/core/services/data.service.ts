@@ -26,6 +26,21 @@ export class DataService {
     this.categoriesSubject.next(savedCategories);
   }
 
+  async defaultCategories() {
+    if (await this.storage.get(STORAGE_KEYS.CATEGORIESDEFAULTCREATED)) {
+      return;
+    }
+    const defaultCategories: Category[] = [
+      { id: uid(), name: 'Trabajo', priority: 'alta' },
+      { id: uid(), name: 'Personal', priority: 'media' },
+      { id: uid(), name: 'Hobby', priority: 'baja' },
+    ];
+    const actual = this.categoriesSubject.value;
+    const finalList = [...actual, ...defaultCategories];
+    await this.updateCategoriesState(finalList);
+    await this.storage.set(STORAGE_KEYS.CATEGORIESDEFAULTCREATED, true);
+  }
+
   getTasks$(): Observable<Task[]> {
     return combineLatest([this.tasksSubject, this.categoriesSubject]).pipe(
       map(([tasks, categories]) => {
@@ -56,13 +71,13 @@ export class DataService {
   }
 
   async updateCategory(updatedCategory: Category) {
-    const updatedCategories = this.categoriesSubject.value.map( category => category.id === updatedCategory.id ? updatedCategory : category);
+    const updatedCategories = this.categoriesSubject.value.map(category => category.id === updatedCategory.id ? updatedCategory : category);
     this.updateCategoriesState(updatedCategories);
   }
 
   async updateTask(updatedTask: Task) {
     console.log('Updating task:', updatedTask);
-    const updatedTasks = this.tasksSubject.value.map( task => task.id === updatedTask.id ? updatedTask : task);
+    const updatedTasks = this.tasksSubject.value.map(task => task.id === updatedTask.id ? updatedTask : task);
     this.updateTasksState(updatedTasks);
   }
 
