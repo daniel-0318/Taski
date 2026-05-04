@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataService } from './core/services/data.service';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +17,26 @@ export class AppComponent {
   ];
 
   titlePage = '';
-  
-  constructor(private router: Router) {
+
+  constructor(
+    private router: Router,
+    private dataService: DataService,
+    private platform: Platform
+  ) {
+    this.initializeApp()
+  }
+
+  async initializeApp() {
+    await this.platform.ready();
+    await this.dataService.defaultCategories();
+    this.setupRouteListener();
+  }
+
+  private setupRouteListener() {
     this.router.events.subscribe(() => {
       const currentRoute = this.router.url;
       const currentPage = this.appPages.find(page => page.url === currentRoute);
       this.titlePage = currentPage ? currentPage.title : '';
     });
-
   }
 }
