@@ -1,0 +1,61 @@
+<ion-searchbar 
+  placeholder="Buscar tarea" 
+  (ionInput)="searchTasks($event)" 
+  debounce="300">
+</ion-searchbar>
+<ion-content>
+  <ion-list>
+    @if ((filteredTasks$ | async)?.length === 0) {
+    <ion-item>
+      <ion-label class="text-center">No hay tareas</ion-label>
+    </ion-item>
+    }
+    @for (task of filteredTasks$ | async; track $index) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title [class]="{ 'text-through': task.completed }">{{ task.title }}</ion-card-title>
+        @if (task.categoryId) {
+        <ion-item>
+          <ion-icon aria-hidden="true" name="ellipse" size="small" [color]="priorityColors[task.priorityName!]"></ion-icon>
+          <ion-label>{{ task.categoryName }}</ion-label>
+        </ion-item>
+        }
+      </ion-card-header>
+  
+      <ion-card-content>
+        @if (task.description) {
+        <p>
+          {{ task.description }}
+        </p>
+        }
+        @if (task.dueDate) {
+        <p>
+          vence el: {{ task.dueDate | date:'dd/MM/yyyy HH:mm' }}
+        </p>
+        }
+      </ion-card-content>
+      <ion-button size="small" fill="clear" color="danger" (click)="showAlert(task.id)">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar
+      </ion-button>
+      <ion-button size="small" fill="clear" (click)="editTask(task)">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar
+      </ion-button>
+      <ion-button size="small" fill="clear" (click)="toggleTask(task.id)">
+        <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+        {{ task.completed ? 'Desmarcar':'Completada' }}
+      </ion-button>
+    </ion-card>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button (click)="openAddTask()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

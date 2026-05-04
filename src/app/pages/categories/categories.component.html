@@ -1,0 +1,45 @@
+<ion-searchbar placeholder="Buscar categoría" (ionInput)="searchCategories($event)" debounce="300">
+</ion-searchbar>
+<ion-content>
+  <ion-list>
+    @if ((filteredcategories$ | async)?.length === 0) {
+    <ion-item>
+      <ion-label class="text-center">No hay categorías</ion-label>
+    </ion-item>
+    }
+    @for (category of filteredcategories$ | async; track $index) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-item>
+            <ion-icon [color]="priorityColors[category.priority]" size="small" name="ellipse">
+            </ion-icon>
+            <ion-label>{{ category.name }}</ion-label>
+          </ion-item>
+        </ion-card-title>
+
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>Prioridad: {{ category.priority }}</p>
+      </ion-card-content>
+      <ion-button size="small" fill="clear" color="danger" (click)="showAlert(category.id)">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar
+      </ion-button>
+      <ion-button size="small" fill="clear" color="primary" (click)="editCategory(category)">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar
+      </ion-button>
+    </ion-card>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button (click)="openAddCategory()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

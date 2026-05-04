@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ category.id ? 'Editar categoría' : 'Nueva categoría' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-input labelPlacement="floating" label="Nombre de la categoría* :" [(ngModel)]="category.name"
+        placeholder="Ingrese el nombre para la categoría"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>prioridad* :</ion-label>
+      <ion-select [(ngModel)]="category.priority" placeholder="Seleccione la prioridad:" >
+        <ion-select-option value="baja">baja</ion-select-option>
+        <ion-select-option value="media">media</ion-select-option>
+        <ion-select-option value="alta" selected>alta</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-button expand="block" (click)="cancel()" color="danger">Cancelar</ion-button>
+  <ion-button expand="block" (click)="category.id ? updateCategory() : createCategory()" [disabled]="!validateForm()">
+    {{ category.id ? 'Actualizar categoría' : 'Crear categoría' }}
+  </ion-button>
+</ion-content>
