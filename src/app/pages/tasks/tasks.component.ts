@@ -17,8 +17,6 @@ export class TasksComponent implements OnInit {
 
   filteredTasks$: Observable<Task[]>;
   categories$: Observable<Category[]>;
-  filteredTasks: Task[] = [];
-  displayedTasks: Task[] = [];
 
   priorityColors = PRIORITY_COLORS;
   private searchTerm$ = new BehaviorSubject<string>('');

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { Category } from 'src/app/core/models/category.model';
 import { DataService } from 'src/app/core/services/data.service';
 import { CreateCategoriesComponent } from './create-categories/create-categories.component';
@@ -14,7 +14,9 @@ import { PRIORITY_COLORS } from 'src/app/core/constants/categories.constants';
 })
 export class CategoriesComponent implements OnInit {
 
-  categories$: Observable<Category[]>;
+  filteredcategories$: Observable<Category[]>;
+  private searchTerm$ = new BehaviorSubject<string>('');
+  private limit$ = new BehaviorSubject<number>(10);
 
   alertButtons = [
     {
@@ -36,14 +38,28 @@ export class CategoriesComponent implements OnInit {
     private modalCtrl: ModalController,
     private alertController: AlertController
   ) {
-    this.categories$ = this.dataService.getCategories$();
+    this.filteredcategories$ = combineLatest([
+      this.dataService.getCategories$(),
+      this.searchTerm$,
+      this.limit$
+    ]).pipe(
+      map(([categories, searchTerm, limit]) => {
+        const filtered = categories.filter(c =>
+          c.name.toLowerCase().includes(searchTerm)
+        );
+        return filtered.slice(0, limit);
+      })
+    );
   }
 
   ngOnInit() { }
 
 
   onIonInfinite(event: any) {
-
+    setTimeout(() => {
+      this.nextPage();
+      event.target.complete();
+    }, 500);
   }
 
   async openAddCategory() {
@@ -60,7 +76,7 @@ export class CategoriesComponent implements OnInit {
       componentProps: { category }
     });
     modal.present();
-    
+
   }
 
   async showAlert(id: string) {
@@ -79,6 +95,16 @@ export class CategoriesComponent implements OnInit {
 
   deleteCategory(categoryId: string) {
     this.dataService.deleteCategory(categoryId);
+  }
+
+  searchCategories(event: any) {
+    const searchTerm = event.target.value.toLowerCase() || '';
+    this.searchTerm$.next(searchTerm);
+  }
+
+  nextPage() {
+    const currentLimit = this.limit$.value;
+    this.limit$.next(currentLimit + 10);
   }
 
 }
