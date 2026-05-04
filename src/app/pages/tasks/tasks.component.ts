@@ -72,6 +72,14 @@ export class TasksComponent implements OnInit {
 
   }
 
+  async editTask(task: Task) {
+    const modal = await this.modalCtrl.create({
+      component: CreateTasksComponent,
+      componentProps: { task }
+    });
+    modal.present();
+  }
+
   async showAlert(id: string) {
     const alert = await this.alertController.create({
       header: '¿Eliminar tarea?',

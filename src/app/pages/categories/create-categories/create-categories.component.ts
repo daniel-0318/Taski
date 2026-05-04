@@ -19,11 +19,9 @@ export class CreateCategoriesComponent implements OnInit {
 
 
   constructor(private modalCtrl: ModalController, private dataService: DataService) {
-    console.log('category', this.category);
   }
 
   ngOnInit() {
-    console.log('ngOnInit category', this.category);
   }
 
   cancel() {
@@ -50,7 +48,6 @@ export class CreateCategoriesComponent implements OnInit {
   }
 
   updateCategory() {
-    console.log('updateCategory', this.category);
     if (!this.validateForm()) {
       return;
     }

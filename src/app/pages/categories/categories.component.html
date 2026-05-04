@@ -23,11 +23,11 @@
       <ion-card-content>
         <p>Prioridad: {{ category.priority }}</p>
       </ion-card-content>
-      <ion-button size="default" fill="clear" color="danger" (click)="showAlert(category.id)">
+      <ion-button size="small" fill="clear" color="danger" (click)="showAlert(category.id)">
         <ion-icon slot="start" name="trash-outline"></ion-icon>
         Eliminar
       </ion-button>
-      <ion-button size="default" fill="clear" color="primary" (click)="editCategory(category)">
+      <ion-button size="small" fill="clear" color="primary" (click)="editCategory(category)">
         <ion-icon slot="start" name="create-outline"></ion-icon>
         Editar
       </ion-button>

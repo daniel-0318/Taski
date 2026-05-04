@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DataService } from '../../../core/services/data.service';
 import { Task } from '../../../core/models/task.model';
@@ -13,10 +13,14 @@ import { Observable } from 'rxjs';
 })
 export class CreateTasksComponent implements OnInit {
 
-  title:string = '';
-  description:string = '';
-  dueDate: string = '';
-  categoryId:string = '';
+  @Input() task: Task = {
+    id: '',
+    title: '',
+    description: '',
+    dueDate: '',
+    categoryId: '',
+    completed: false
+  }
   categories$: Observable<Category[]>;
 
   constructor(private modalCtrl: ModalController, private dataService: DataService) { 
@@ -40,19 +44,37 @@ export class CreateTasksComponent implements OnInit {
 
     const newTask: Task = {
       id: '',
-      title: this.title,
-      description: this.description,
-      dueDate: this.dueDate ? new Date(this.dueDate) : undefined,
-      categoryId: this.categoryId,
+      title: this.task.title,
+      description: this.task.description,
+      dueDate: this.task.dueDate ? new Date(this.task.dueDate).toISOString() : '',
+      categoryId: this.task.categoryId,
       completed: false
     };
     this.dataService.addTask(newTask);
     this.confirm();
   }
 
+  updateTask() {
+    if (!this.validateForm()) {
+      return;
+    }
+    const updatedTask: Task = {
+      id: this.task.id,
+      title: this.task.title,
+      description: this.task.description,
+      dueDate: this.task.dueDate ? new Date(this.task.dueDate).toISOString() : '',
+      categoryId: this.task.categoryId,
+      completed: this.task.completed
+    };
+    this.dataService.updateTask(updatedTask);
+    this.confirm();
+  }
+
   validateForm(): boolean {
-    return this.title.trim() !== '' && this.description.trim() !== '' 
-    && this.dueDate.trim() !== '' && this.categoryId.trim() !== '';
+    return this.task.title.trim() !== ''
+      && this.task.description.trim() !== ''
+      && this.task.dueDate?.trim() !== ''
+      && this.task.categoryId?.trim() !== '';
   }
 
 }

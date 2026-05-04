@@ -34,11 +34,15 @@
         </p>
         }
       </ion-card-content>
-      <ion-button size="default" fill="clear" color="danger" (click)="showAlert(task.id)">
+      <ion-button size="small" fill="clear" color="danger" (click)="showAlert(task.id)">
         <ion-icon slot="start" name="trash-outline"></ion-icon>
         Eliminar
       </ion-button>
-      <ion-button size="default" fill="clear" (click)="toggleTask(task.id)">
+      <ion-button size="small" fill="clear" (click)="editTask(task)">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar
+      </ion-button>
+      <ion-button size="small" fill="clear" (click)="toggleTask(task.id)">
         <ion-icon slot="start" name="checkmark-outline"></ion-icon>
         {{ task.completed ? 'Desmarcar':'Completada' }}
       </ion-button>

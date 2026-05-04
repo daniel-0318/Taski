@@ -1,8 +1,8 @@
 export interface Task {
   id: string;
   title: string;
-  description?: string;
-  dueDate?: Date;
+  description: string;
+  dueDate?: string;
   completed: boolean;
   categoryId?: string;
   categoryName?: string;
