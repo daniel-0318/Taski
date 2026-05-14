@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { environment } from 'src/environments/environment';
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+  provideFirestore (() => getFirestore()),
   provideRemoteConfig(() => getRemoteConfig()),
   ],
   bootstrap: [AppComponent],
