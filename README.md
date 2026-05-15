@@ -6,7 +6,7 @@
 ## 🛠️ Tecnologías Utilizadas
 *   **Framework:** Ionic 8 con Angular 20.
 *   **Wrapper Nativo:** Cordova para despliegue híbrido.
-*   **Backend:** Firebase Remote Config para gestión de Feature Flags.
+*   **Backend:** Firebase Remote Config para gestión de Feature Flags y Firebase para la base de datos.
 *   **Estado:** Programación reactiva con RxJS.
 *   **Arquitectura:** Organización por capas (Core, Features, Shared) y patrón MVVM.
 
@@ -16,7 +16,8 @@
 *   **Gestión de Tareas:** Permite agregar,editar , marcar como completadas y eliminar tareas de forma eficiente.
 *   **Categorización Personalizada:** Creación, edición y eliminación de categorías.
 *   **Filtrado Inteligente:** Capacidad de filtrar la lista de tareas según la categoría asignada realizando una busqueda con el nombre.
-**Feature Flag (Firebase):** Control remoto de la funcionalidad de edición mediante el parámetro `task_edit_enabled` en Firebase.
+*   **Feature Flag (Firebase):** Control remoto de la funcionalidad de edición mediante el parámetro `task_edit_enabled` en Firebase.
+*   **Firestore (Firebase):** Uso de firestore para almacenar las categorias y tareas creadas.
 
 ---
 
